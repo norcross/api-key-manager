@@ -39,7 +39,8 @@ class API_Key_Manager
 		add_action		( 'admin_init', 				array( $this, 'key_cleanup'				) 			);
 		add_action		( 'wp_ajax_save_api',			array( $this, 'save_api'				)			);
 		add_filter		( 'plugin_action_links',		array( $this, 'quick_link'				), 10,	2	);
-
+		// custom hook
+//		add_action		( 'akm_get_key',				array( $this, 'get_key'					)			);
 	}
 
 	/**
@@ -128,7 +129,7 @@ class API_Key_Manager
 	public function get_key($key) {
 
 		// no key sent? GO HOME
-		if (!isset($key))
+		if (empty($key))
 			return;
 
 		// set a null return first
@@ -138,8 +139,10 @@ class API_Key_Manager
 
 		foreach ($apikeys as $apikey) :
 
-			if (in_array($key, $apikey))
+			if (in_array($key, $apikey)) {
     			$keyvalue = $apikey['keyvalue'];
+    			break;
+    		}
 
     	endforeach;
 
@@ -148,13 +151,12 @@ class API_Key_Manager
 	}
 
 	/**
-	 * build out settings page and meta boxes
+	 * store array of keysets
 	 *
 	 * @return API_Key_Manager
 	 */
 
 	public function key_cleanup() {
-		//https://gist.github.com/1593065
 
 		if (!current_user_can('manage_options') )
 			return;
@@ -248,17 +250,17 @@ class API_Key_Manager
 					echo '<tr class="api-key-row">';
 						echo '<td><input type="text" class="widefat key-name" name="keyname[]" value="'.$keyname.'" /></td>';
                     	echo '<td><input type="text" class="widefat key-value" name="keyvalue[]" value="'.$keyvalue.'" /></td>';
-                    	echo '<td><input type="button" class="remove-key" value="'. __('Remove') .'" /></td>';
+                    	echo '<td><input type="button" name="Remove '.$keyname.'" class="remove-key" value="'. __('Remove') .'" /></td>';
 					echo '</tr>';
 
 				endforeach;
 				else:
 					// an empty one
-                echo '<tr class="api-key-row">';
-                	echo '<td><input type="text" class="widefat key-name" name="keyname[]" value="" /></td>';
-                	echo '<td><input type="text" class="widefat key-value" name="keyvalue[]" value="" /></td>';
-                	echo '<td><input type="button" class="remove-key" value="'. __('Remove') .'" /></td>';
-				echo '</tr>';
+	                echo '<tr class="api-key-row">';
+	                	echo '<td><input type="text" class="widefat key-name" name="keyname[]" value="" /></td>';
+	                	echo '<td><input type="text" class="widefat key-value" name="keyvalue[]" value="" /></td>';
+	                	echo '<td><input type="button" class="remove-key" value="'. __('Remove') .'" /></td>';
+					echo '</tr>';
 				endif;
 
 				?>
@@ -302,9 +304,9 @@ class API_Key_Manager
 				<div id="faq-admin-about" class="postbox">
 					<h3 class="hndle" id="about-sidebar"><?php _e('About the Plugin', 'apimanager'); ?></h3>
 					<div class="inside">
-						<p><?php _e('Talk to') ?> <a href="http://twitter.com/norcross" target="_blank">@norcross</a> <?php _e('on twitter or visit the', 'apimanager'); ?> <a href="http://wordpress.org/support/plugin/wordpress-faq-manager/" target="_blank"><?php _e('plugin support form') ?></a> <?php _e('for bugs or feature requests.', 'apimanager'); ?></p>
+						<p><?php _e('Talk to') ?> <a href="http://twitter.com/norcross" target="_blank">@norcross</a> <?php _e('on twitter or visit the', 'apimanager'); ?> <a href="http://wordpress.org/support/plugin/api-key-manager/" target="_blank"><?php _e('plugin support form') ?></a> <?php _e('for bugs or feature requests.', 'apimanager'); ?></p>
 						<p><?php _e('<strong>Enjoy the plugin?</strong>', 'apimanager'); ?><br />
-						<a href="http://twitter.com/?status=I'm using @norcross's WordPress FAQ Manager plugin - check it out! http://l.norc.co/wpfaq/" target="_blank"><?php _e('Tweet about it', 'apimanager'); ?></a> <?php _e('and consider donating.', 'apimanager'); ?></p>
+						<a href="http://twitter.com/?status=I'm using @norcross's API Key Manager plugin - check it out! http://l.norc.co/apikey/" target="_blank"><?php _e('Tweet about it', 'apimanager'); ?></a> <?php _e('and consider donating.', 'apimanager'); ?></p>
 						<p><?php _e('<strong>Donate:</strong> A lot of hard work goes into building plugins - support your open source developers. Include your twitter username and I\'ll send you a shout out for your generosity. Thank you!', 'apimanager'); ?><br />
 						<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
 						<input type="hidden" name="cmd" value="_s-xclick">
@@ -321,10 +323,9 @@ class API_Key_Manager
 					<h3 class="hndle" id="links-sidebar"><?php _e('Links', 'apimanager'); ?></h3>
 					<div class="inside">
 						<ul>
-						<li><a href="http://wordpress.org/extend/plugins/#/" target="_blank"><?php _e('Plugin on WP.org', 'apimanager'); ?></a></li>
-						<li><a href="https://github.com/norcross/WordPress-FAQ-Manager" target="_blank"><?php _e('Plugin on GitHub', 'apimanager'); ?></a></li>
-						<li><a href="http://wordpress.org/support/plugin/wordpress-faq-manager" target="_blank"><?php _e('Support Forum', 'apimanager'); ?></a><li>
-            			<li><a href="<?php echo menu_page_url( 'faq-instructions', 0 ); ?>"><?php _e('Instructions page', 'apimanager'); ?></a></li>
+						<li><a href="http://wordpress.org/extend/plugins/api-key-manager/" target="_blank"><?php _e('Plugin on WP.org', 'apimanager'); ?></a></li>
+						<li><a href="https://github.com/norcross/api-key-manager" target="_blank"><?php _e('Plugin on GitHub', 'apimanager'); ?></a></li>
+						<li><a href="http://wordpress.org/support/plugin/api-key-manager/" target="_blank"><?php _e('Support Forum', 'apimanager'); ?></a><li>
             			</ul>
 					</div>
 				</div>
