@@ -3,7 +3,7 @@
 Plugin Name: API Key Manager
 Plugin URI: http://andrewnorcross.com/plugins/api-key-manager/
 Description: Creates an admin page for storing multiple API keys.
-Version: 1.0
+Version: 0.1
 Author: Andrew Norcross
 Author URI: http://andrewnorcross.com
 
