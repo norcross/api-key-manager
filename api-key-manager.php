@@ -37,7 +37,6 @@ class API_Key_Manager
 		add_action		( 'admin_menu',					array( $this, 'api_manager_settings'	) 			);
 		add_action		( 'admin_init', 				array( $this, 'reg_settings'			) 			);
 		add_action		( 'admin_init', 				array( $this, 'key_cleanup'				) 			);
-		add_action		( 'wp_ajax_save_api',			array( $this, 'save_api'				)			);
 		add_filter		( 'plugin_action_links',		array( $this, 'quick_link'				), 10,	2	);
 	}
 
