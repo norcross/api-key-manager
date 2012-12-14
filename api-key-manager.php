@@ -39,8 +39,6 @@ class API_Key_Manager
 		add_action		( 'admin_init', 				array( $this, 'key_cleanup'				) 			);
 		add_action		( 'wp_ajax_save_api',			array( $this, 'save_api'				)			);
 		add_filter		( 'plugin_action_links',		array( $this, 'quick_link'				), 10,	2	);
-		// custom hook
-//		add_action		( 'akm_get_key',				array( $this, 'get_key'					)			);
 	}
 
 	/**
@@ -125,7 +123,7 @@ class API_Key_Manager
 	 *
 	 * @return API_Key_Manager
 	 */
-
+/*
 	public function get_key($key) {
 
 		// no key sent? GO HOME
@@ -149,7 +147,7 @@ class API_Key_Manager
     	return $keyvalue;
 
 	}
-
+*/
 	/**
 	 * store array of keysets
 	 *
@@ -184,7 +182,7 @@ class API_Key_Manager
 					$updates[$i]['keyname'] = stripslashes( strip_tags( $keynames[$i] ) );
 
 					if ( $keyvalues[$i] != '' )
-						$updates[$i]['keyvalue'] = stripslashes( $keyvalues[$i] ); // and however you want to sanitize
+						$updates[$i]['keyvalue'] = stripslashes( $keyvalues[$i] );
 
 				endif;
 			}
@@ -194,6 +192,12 @@ class API_Key_Manager
 
 			elseif ( empty($updates) && $current )
 				delete_option( 'apikeys' );
+
+
+			// reload page to clear _POST values
+			$url = menu_page_url( 'api-manager', 0 );
+			wp_redirect( esc_url_raw( $url ), 301 );
+			exit();
 
 		// end repeatable stuff
 		endif;
@@ -277,7 +281,7 @@ class API_Key_Manager
 
                 <input type="button" id="api-clone" class="button button-secondary" value="Add Row">
 
-	    		<p><input type="submit" class="button-primary save-api" value="<?php _e('Save Changes') ?>" /></p>
+	    		<p><input type="submit" class="button-primary save-api" value="<?php _e('Save Keys') ?>" /></p>
 				</form>
 
 			</div>
@@ -361,3 +365,40 @@ class API_Key_Manager
 
 // Instantiate our class
 $API_Key_Manager = new API_Key_Manager();
+
+
+/**
+ * function for theme to call keys
+ *
+ * @return API_Key_Manager
+ */
+
+function akm_get_key($key) {
+
+	// no key sent? GO HOME
+	if (empty($key))
+		return;
+
+	// get existing keys and bail if empty
+	$apikeys = get_option('apikeys');
+	if (empty($apikeys))
+		return;
+
+	// set an empty warning return first
+	//$keyvalue = false;
+	$keyvalue = 'NOKEYFOUND';
+
+	foreach ($apikeys as $apikey) :
+
+		if (in_array($key, $apikey)) {
+   			$keyvalue = $apikey['keyvalue'];
+   			break;
+   		}
+
+   	endforeach;
+
+   	return $keyvalue;
+
+}
+
+
