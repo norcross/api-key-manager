@@ -50,7 +50,7 @@ class API_Key_Manager
 
 	public function textdomain() {
 
-		load_plugin_textdomain( 'apimanager', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+		load_plugin_textdomain( 'akm', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	}
 
 	/**
@@ -87,7 +87,7 @@ class API_Key_Manager
     	// check to make sure we are on the correct plugin
     	if ($file == $this_plugin) {
 
-			$settings_link	= '<a href="'.menu_page_url( 'api-manager', 0 ).'">'. __('API Keys', 'apimanager').'</a>';
+			$settings_link	= '<a href="'.menu_page_url( 'api-manager', 0 ).'">'. __('API Keys', 'akm').'</a>';
 
         	array_unshift($links, $settings_link);
     	}
@@ -103,7 +103,7 @@ class API_Key_Manager
 	 */
 
 	public function api_manager_settings() {
-	    add_submenu_page('tools.php', __('API Key Manager', 'apimanager'), __('API Key Manager', 'apimanager'), 'manage_options', 'api-manager', array( $this, 'api_manager_display' ));
+	    add_submenu_page('tools.php', __('API Key Manager', 'akm'), __('API Key Manager', 'akm'), 'manage_options', 'api-manager', array( $this, 'api_manager_display' ));
 
 	}
 
@@ -118,36 +118,7 @@ class API_Key_Manager
 		register_setting( 'apikeys', 'apikeys');
 	}
 
-	/**
-	 * helper for calling keys
-	 *
-	 * @return API_Key_Manager
-	 */
-/*
-	public function get_key($key) {
 
-		// no key sent? GO HOME
-		if (empty($key))
-			return;
-
-		// set a null return first
-		$keyvalue = false;
-
-		$apikeys = get_option('apikeys');
-
-		foreach ($apikeys as $apikey) :
-
-			if (in_array($key, $apikey)) {
-    			$keyvalue = $apikey['keyvalue'];
-    			break;
-    		}
-
-    	endforeach;
-
-    	return $keyvalue;
-
-	}
-*/
 	/**
 	 * store array of keysets
 	 *
@@ -227,7 +198,7 @@ class API_Key_Manager
 		?>
 
            	<div class="inner-form-text">
-           	<p><?php _e('This block of text will eventually have an explanation of what it does.') ?></p>
+           	<p><?php _e('Enter your various API keys and their corresponding values.') ?></p>
             </div>
 
             <div class="inner-form-options">
@@ -286,6 +257,12 @@ class API_Key_Manager
 
 			</div>
 
+           	<div class="inner-form-text">
+           	<p><?php _e('To call a specific key value anywhere in a theme, use the following function') ?></p>
+            <p><code>$mykey = akm_get_key('something');</code>
+            </div>
+
+
 	<?php echo $this->settings_close(); ?>
 
 	</div>
@@ -305,13 +282,13 @@ class API_Key_Manager
 
 		<div id="side-info-column" class="inner-sidebar">
 			<div class="meta-box-sortables">
-				<div id="faq-admin-about" class="postbox">
-					<h3 class="hndle" id="about-sidebar"><?php _e('About the Plugin', 'apimanager'); ?></h3>
+				<div id="admin-about" class="postbox akm-sidebox">
+					<h3 class="hndle" id="about-sidebar"><?php _e('About the Plugin', 'akm'); ?></h3>
 					<div class="inside">
-						<p><?php _e('Talk to') ?> <a href="http://twitter.com/norcross" target="_blank">@norcross</a> <?php _e('on twitter or visit the', 'apimanager'); ?> <a href="http://wordpress.org/support/plugin/api-key-manager/" target="_blank"><?php _e('plugin support form') ?></a> <?php _e('for bugs or feature requests.', 'apimanager'); ?></p>
-						<p><?php _e('<strong>Enjoy the plugin?</strong>', 'apimanager'); ?><br />
-						<a href="http://twitter.com/?status=I'm using @norcross's API Key Manager plugin - check it out! http://l.norc.co/apikey/" target="_blank"><?php _e('Tweet about it', 'apimanager'); ?></a> <?php _e('and consider donating.', 'apimanager'); ?></p>
-						<p><?php _e('<strong>Donate:</strong> A lot of hard work goes into building plugins - support your open source developers. Include your twitter username and I\'ll send you a shout out for your generosity. Thank you!', 'apimanager'); ?><br />
+						<p><?php _e('Talk to') ?> <a href="http://twitter.com/norcross" target="_blank">@norcross</a> <?php _e('on twitter or visit the', 'akm'); ?> <a href="http://wordpress.org/support/plugin/api-key-manager/" target="_blank"><?php _e('plugin support form') ?></a> <?php _e('for bugs or feature requests.', 'akm'); ?></p>
+						<p><?php _e('<strong>Enjoy the plugin?</strong>', 'akm'); ?><br />
+						<a href="http://twitter.com/?status=I'm using @norcross's API Key Manager plugin - check it out! http://l.norc.co/apikey/" target="_blank"><?php _e('Tweet about it', 'akm'); ?></a> <?php _e('and consider donating.', 'akm'); ?></p>
+						<p><?php _e('<strong>Donate:</strong> A lot of hard work goes into building plugins - support your open source developers. Include your twitter username and I\'ll send you a shout out for your generosity. Thank you!', 'akm'); ?><br />
 						<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
 						<input type="hidden" name="cmd" value="_s-xclick">
 						<input type="hidden" name="hosted_button_id" value="11085100">
@@ -324,12 +301,12 @@ class API_Key_Manager
 
 			<div class="meta-box-sortables">
 				<div id="admin-more" class="postbox">
-					<h3 class="hndle" id="links-sidebar"><?php _e('Links', 'apimanager'); ?></h3>
+					<h3 class="hndle" id="links-sidebar"><?php _e('Links', 'akm'); ?></h3>
 					<div class="inside">
 						<ul>
-						<li><a href="http://wordpress.org/extend/plugins/api-key-manager/" target="_blank"><?php _e('Plugin on WP.org', 'apimanager'); ?></a></li>
-						<li><a href="https://github.com/norcross/api-key-manager" target="_blank"><?php _e('Plugin on GitHub', 'apimanager'); ?></a></li>
-						<li><a href="http://wordpress.org/support/plugin/api-key-manager/" target="_blank"><?php _e('Support Forum', 'apimanager'); ?></a><li>
+						<li><a href="http://wordpress.org/extend/plugins/api-key-manager/" target="_blank"><?php _e('Plugin on WP.org', 'akm'); ?></a></li>
+						<li><a href="https://github.com/norcross/api-key-manager" target="_blank"><?php _e('Plugin on GitHub', 'akm'); ?></a></li>
+						<li><a href="http://wordpress.org/support/plugin/api-key-manager/" target="_blank"><?php _e('Support Forum', 'akm'); ?></a><li>
             			</ul>
 					</div>
 				</div>
