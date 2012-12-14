@@ -18,6 +18,13 @@ div#icon-api-manager {
 	cursor: pointer;
 }
 
+.api-key-row input.key-duplicate {
+	border-color: #A00000;
+	-moz-box-shadow: 0 0 5px #A00000;
+	-webkit-box-shadow: 0 0 5px#A00000;
+	box-shadow: 0 0 5px #A00000;
+}
+
 input#api-clone {
 	background:url(../img/key-add.png) no-repeat 5px 2px;
     padding: 0 10px 1px 27px;
