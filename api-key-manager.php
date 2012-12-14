@@ -234,7 +234,6 @@ class API_Key_Manager
 	                echo '<tr class="api-key-row">';
 	                	echo '<td><input type="text" class="widefat key-name" name="keyname[]" value="" /></td>';
 	                	echo '<td><input type="text" class="widefat key-value" name="keyvalue[]" value="" /></td>';
-	                	echo '<td><input type="button" class="remove-key" value="'. __('Remove') .'" /></td>';
 					echo '</tr>';
 				endif;
 
